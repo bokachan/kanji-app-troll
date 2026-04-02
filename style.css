@@ -267,28 +267,13 @@ body {
 .flashcard {
   width: 100%;
   max-width: 480px;
-  height: 280px;
-  perspective: 1200px;
+  min-height: 280px;
   cursor: pointer;
-}
-.flashcard-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  transition: transform .55s cubic-bezier(.4,0,.2,1);
-}
-.flashcard.flipped .flashcard-inner {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
 }
 .flashcard-front,
 .flashcard-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  width: 100%;
+  min-height: 280px;
   background: var(--paper);
   border: 1.5px solid var(--paper-3);
   border-radius: var(--radius-lg);
@@ -296,17 +281,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   box-shadow: var(--shadow-lg);
-  padding: 24px;
+  padding: 28px 24px;
 }
 .flashcard-back {
-  transform: rotateY(180deg);
-  justify-content: center;
-  gap: 12px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  visibility: visible;
+  display: none;
+}
+.flashcard.flipped .flashcard-front {
+  display: none;
+}
+.flashcard.flipped .flashcard-back {
+  display: flex;
 }
 .fc-kanji {
   font-family: 'Shippori Mincho', serif;
