@@ -1,0 +1,596 @@
+/* ============================================================
+   KANJI-DŌ — Style sheet
+   Aesthetic: Japanese ink on paper — refined, calm, typographic
+   ============================================================ */
+
+:root {
+  --ink:       #1a1410;
+  --ink-soft:  #3d3530;
+  --ink-muted: #7a6f68;
+  --paper:     #f7f3ed;
+  --paper-2:   #efe9e0;
+  --paper-3:   #e5ddd2;
+  --red:       #c0392b;
+  --red-soft:  #e8d5d3;
+  --blue:      #2c5f8a;
+  --blue-soft: #d2e4f0;
+  --gold:      #b8860b;
+  --gold-soft: #f5edd5;
+  --green:     #2d6a4f;
+  --green-soft:#d8ead3;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow:    0 2px 12px rgba(26,20,16,.10);
+  --shadow-lg: 0 8px 32px rgba(26,20,16,.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--ink);
+  color: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(26,20,16,.25);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 64px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.logo-kanji {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 32px;
+  color: #e8b84b;
+  line-height: 1;
+}
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.logo-title {
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: .05em;
+  color: #f0ebe3;
+}
+.logo-sub {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 11px;
+  color: #9a9080;
+  letter-spacing: .12em;
+}
+.main-nav {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: #b0a898;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .18s;
+  white-space: nowrap;
+}
+.nav-btn:hover { background: rgba(255,255,255,.08); color: #f0ebe3; }
+.nav-btn.active { background: rgba(232,184,75,.15); color: #e8b84b; }
+.header-score {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.score-label { font-size: 10px; color: #9a9080; letter-spacing: .1em; text-transform: uppercase; }
+.score-value { font-family: 'Shippori Mincho', serif; font-size: 22px; color: #e8b84b; line-height: 1; }
+
+/* ── LEÇON BAR ── */
+.lecon-bar {
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--paper-3);
+  display: flex;
+  gap: 6px;
+  padding: 10px 24px;
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: thin;
+}
+.lecon-btn {
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  color: var(--ink-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all .18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.lecon-btn:hover { border-color: var(--ink-muted); color: var(--ink); }
+.lecon-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* ── VIEWS ── */
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px;
+}
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── LIST VIEW ── */
+.list-search {
+  margin-bottom: 20px;
+}
+.list-search input {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .18s;
+}
+.list-search input:focus { border-color: var(--ink-muted); }
+
+.kanji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+.kanji-card {
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  border-radius: var(--radius-md);
+  padding: 16px 12px 12px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.kanji-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--paper-3);
+  transition: background .2s;
+}
+.kanji-card:hover { border-color: var(--ink-muted); box-shadow: var(--shadow); transform: translateY(-2px); }
+.kanji-card:hover::before { background: var(--gold); }
+
+.kanji-card .kc-char {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--ink);
+}
+.kanji-card .kc-on {
+  font-size: 11px;
+  color: var(--blue);
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-align: center;
+}
+.kanji-card .kc-kun {
+  font-size: 11px;
+  color: var(--red);
+  text-align: center;
+}
+.kanji-card .kc-meaning {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+  margin-top: 2px;
+}
+.kanji-card .kc-lecon {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 9px;
+  color: var(--ink-muted);
+  letter-spacing: .06em;
+}
+
+/* ── GAME HEADER ── */
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--paper-3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #e8b84b);
+  border-radius: 3px;
+  transition: width .4s ease;
+  width: 0%;
+}
+.counter { font-size: 13px; color: var(--ink-muted); white-space: nowrap; }
+.game-score { font-family: 'Shippori Mincho', serif; font-size: 15px; color: var(--gold); white-space: nowrap; }
+
+/* ── FLASHCARDS ── */
+.flashcard-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.flashcard {
+  width: 100%;
+  max-width: 480px;
+  height: 280px;
+  perspective: 1200px;
+  cursor: pointer;
+}
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.4,0,.2,1);
+}
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--shadow-lg);
+  padding: 24px;
+}
+.flashcard-back { transform: rotateY(180deg); justify-content: center; gap: 12px; }
+.fc-kanji {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 96px;
+  line-height: 1;
+  color: var(--ink);
+}
+.fc-hint { font-size: 12px; color: var(--ink-muted); letter-spacing: .06em; }
+.fc-readings {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.reading-block {
+  text-align: center;
+  font-size: 13px;
+}
+.reading-block span.label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .1em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.reading-block span.vals { color: var(--ink); }
+.fc-meaning {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 20px;
+  color: var(--ink);
+  text-align: center;
+}
+.fc-lecon { font-size: 11px; color: var(--ink-muted); }
+.fc-actions {
+  display: flex;
+  gap: 16px;
+}
+.btn-wrong, .btn-right {
+  padding: 12px 28px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .18s;
+  font-weight: 500;
+}
+.btn-wrong { background: var(--red-soft); color: var(--red); }
+.btn-wrong:hover { background: var(--red); color: #fff; }
+.btn-right { background: var(--green-soft); color: var(--green); }
+.btn-right:hover { background: var(--green); color: #fff; }
+
+/* ── QCM ── */
+.qcm-arena { max-width: 560px; margin: 0 auto; }
+.qcm-question { text-align: center; margin-bottom: 28px; }
+.qcm-kanji {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 88px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.qcm-prompt { font-size: 14px; color: var(--ink-muted); }
+.qcm-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.choice-btn {
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .18s;
+  text-align: center;
+}
+.choice-btn:hover:not(:disabled) { border-color: var(--ink-muted); background: var(--paper-2); }
+.choice-btn.correct  { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.choice-btn.wrong    { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.choice-btn:disabled { cursor: default; }
+.qcm-feedback {
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.qcm-feedback.correct { background: var(--green-soft); color: var(--green); }
+.qcm-feedback.wrong   { background: var(--red-soft);   color: var(--red); }
+
+/* ── ORTHOGRAPHE ── */
+.orth-arena { max-width: 480px; margin: 0 auto; }
+.orth-question { text-align: center; margin-bottom: 28px; }
+.orth-kanji {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 96px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.orth-prompt { font-size: 14px; color: var(--ink-muted); }
+.orth-input-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.orth-input {
+  flex: 1;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .18s;
+}
+.orth-input:focus { border-color: var(--ink-muted); }
+.btn-valider {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity .18s;
+}
+.btn-valider:hover { opacity: .82; }
+.orth-feedback {
+  text-align: center;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.orth-feedback.correct { background: var(--green-soft); color: var(--green); }
+.orth-feedback.wrong   { background: var(--red-soft);   color: var(--red); }
+.orth-answer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-muted);
+  padding: 6px;
+}
+
+/* ── MÉMOIRE ── */
+.mem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto 20px;
+}
+.mem-card {
+  aspect-ratio: 1;
+  background: var(--ink);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 22px;
+  color: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s, box-shadow .18s;
+  user-select: none;
+}
+.mem-card::before {
+  content: '漢';
+  position: absolute;
+  font-size: 28px;
+  color: rgba(232,184,75,.15);
+}
+.mem-card:hover:not(.revealed):not(.matched) { transform: scale(1.04); }
+.mem-card.revealed, .mem-card.matched {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--paper-3);
+  font-size: 16px;
+}
+.mem-card.revealed::before, .mem-card.matched::before { display: none; }
+.mem-card.matched { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.mem-card.shake {
+  animation: shake .35s ease;
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}
+}
+
+/* ── SHARED BUTTONS ── */
+.btn-next {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 28px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  transition: opacity .18s;
+}
+.btn-next:hover { opacity: .82; }
+.btn-restart {
+  background: transparent;
+  border: 1.5px solid var(--paper-3);
+  color: var(--ink-muted);
+  border-radius: var(--radius-md);
+  padding: 9px 22px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  display: block;
+  margin: 24px auto 0;
+  transition: all .18s;
+}
+.btn-restart:hover { border-color: var(--ink-muted); color: var(--ink); }
+.hidden { display: none !important; }
+
+/* ── MODAL ── */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(26,20,16,.55);
+  backdrop-filter: blur(4px);
+}
+.modal-card {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  padding: 36px 40px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.modal-close {
+  position: absolute;
+  top: 14px; right: 16px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.modal-kanji {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 80px;
+  line-height: 1;
+  margin-bottom: 24px;
+}
+.modal-details { text-align: left; }
+.modal-row {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--paper-3);
+  align-items: flex-start;
+}
+.modal-row:last-child { border-bottom: none; }
+.modal-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  min-width: 72px;
+  padding-top: 2px;
+}
+.modal-val { font-size: 14px; color: var(--ink); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .header-inner { padding: 0 14px; gap: 12px; }
+  .main-nav { display: none; }
+  .kanji-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .fc-kanji { font-size: 72px; }
+  .qcm-kanji { font-size: 64px; }
+  .qcm-choices { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>漢字道 · Kanji-dō</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-kanji">漢</span>
+        <div class="logo-text">
+          <span class="logo-title">Kanji-dō</span>
+          <span class="logo-sub">漢字道</span>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-view="list">📚 Liste</button>
+        <button class="nav-btn" data-view="flashcards">🃏 Flashcards</button>
+        <button class="nav-btn" data-view="qcm">❓ QCM</button>
+        <button class="nav-btn" data-view="orthographe">✍️ Orthographe</button>
+        <button class="nav-btn" data-view="memoire">🧩 Mémoire</button>
+      </nav>
+      <div class="header-score">
+        <span class="score-label">Score</span>
+        <span class="score-value" id="total-score">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- LECON SELECTOR -->
+  <div class="lecon-bar">
+    <button class="lecon-btn active" data-lecon="all">Toutes</button>
+    <button class="lecon-btn" data-lecon="1">Leçon 1</button>
+    <button class="lecon-btn" data-lecon="2">Leçon 2</button>
+    <button class="lecon-btn" data-lecon="3">Leçon 3</button>
+    <button class="lecon-btn" data-lecon="4">Leçon 4</button>
+    <button class="lecon-btn" data-lecon="5">Leçon 5</button>
+    <button class="lecon-btn" data-lecon="6">Leçon 6</button>
+    <button class="lecon-btn" data-lecon="7">Leçon 7</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="app">
+
+    <!-- ===== VUE LISTE ===== -->
+    <section id="view-list" class="view active">
+      <div class="list-search">
+        <input type="text" id="search-input" placeholder="Rechercher un kanji ou un sens…">
+      </div>
+      <div id="kanji-grid" class="kanji-grid"></div>
+    </section>
+
+    <!-- ===== VUE FLASHCARDS ===== -->
+    <section id="view-flashcards" class="view">
+      <div class="game-header">
+        <div class="progress-bar"><div id="fc-progress" class="progress-fill"></div></div>
+        <span id="fc-counter" class="counter">0 / 0</span>
+      </div>
+      <div class="flashcard-arena">
+        <div id="flashcard" class="flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="fc-kanji" id="fc-kanji">漢</div>
+              <div class="fc-hint">Cliquez pour révéler</div>
+            </div>
+            <div class="flashcard-back">
+              <div class="fc-readings">
+                <div class="reading-block" id="fc-on"></div>
+                <div class="reading-block" id="fc-kun"></div>
+              </div>
+              <div class="fc-meaning" id="fc-meaning"></div>
+              <div class="fc-lecon" id="fc-lecon"></div>
+            </div>
+          </div>
+        </div>
+        <div class="fc-actions" id="fc-actions" style="display:none">
+          <button class="btn-wrong" id="fc-wrong">✗ À revoir</button>
+          <button class="btn-right" id="fc-right">✓ Connu</button>
+        </div>
+      </div>
+      <button class="btn-restart" id="fc-restart">Recommencer</button>
+    </section>
+
+    <!-- ===== VUE QCM ===== -->
+    <section id="view-qcm" class="view">
+      <div class="game-header">
+        <div class="progress-bar"><div id="qcm-progress" class="progress-fill"></div></div>
+        <span id="qcm-counter" class="counter">0 / 0</span>
+        <span id="qcm-score" class="game-score">0 pts</span>
+      </div>
+      <div class="qcm-arena">
+        <div class="qcm-question">
+          <div id="qcm-kanji" class="qcm-kanji">漢</div>
+          <div id="qcm-prompt" class="qcm-prompt">Quelle est la lecture on'yomi ?</div>
+        </div>
+        <div id="qcm-choices" class="qcm-choices"></div>
+        <div id="qcm-feedback" class="qcm-feedback hidden"></div>
+        <button class="btn-next hidden" id="qcm-next">Suivant →</button>
+      </div>
+      <button class="btn-restart" id="qcm-restart">Recommencer</button>
+    </section>
+
+    <!-- ===== VUE ORTHOGRAPHE ===== -->
+    <section id="view-orthographe" class="view">
+      <div class="game-header">
+        <div class="progress-bar"><div id="orth-progress" class="progress-fill"></div></div>
+        <span id="orth-counter" class="counter">0 / 0</span>
+        <span id="orth-score" class="game-score">0 pts</span>
+      </div>
+      <div class="orth-arena">
+        <div class="orth-question">
+          <div id="orth-kanji" class="orth-kanji">漢</div>
+          <div id="orth-prompt" class="orth-prompt">Écrivez la lecture en hiragana/romaji</div>
+        </div>
+        <div class="orth-input-wrap">
+          <input type="text" id="orth-input" class="orth-input" placeholder="Votre réponse…" autocomplete="off">
+          <button class="btn-valider" id="orth-valider">Valider</button>
+        </div>
+        <div id="orth-feedback" class="orth-feedback hidden"></div>
+        <div id="orth-answer" class="orth-answer hidden"></div>
+        <button class="btn-next hidden" id="orth-next">Suivant →</button>
+      </div>
+      <button class="btn-restart" id="orth-restart">Recommencer</button>
+    </section>
+
+    <!-- ===== VUE MÉMOIRE ===== -->
+    <section id="view-memoire" class="view">
+      <div class="game-header">
+        <span id="mem-pairs" class="counter">0 paires trouvées</span>
+        <span id="mem-moves" class="game-score">0 coups</span>
+        <span id="mem-timer" class="game-score">0s</span>
+      </div>
+      <div id="mem-grid" class="mem-grid"></div>
+      <button class="btn-restart" id="mem-restart">Recommencer</button>
+    </section>
+
+  </main>
+
+  <!-- MODAL DÉTAIL KANJI -->
+  <div id="kanji-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close">✕</button>
+      <div class="modal-kanji" id="modal-kanji"></div>
+      <div class="modal-details">
+        <div class="modal-row">
+          <span class="modal-label">On'yomi</span>
+          <span class="modal-val" id="modal-on"></span>
+        </div>
+        <div class="modal-row">
+          <span class="modal-label">Kun'yomi</span>
+          <span class="modal-val" id="modal-kun"></span>
+        </div>
+        <div class="modal-row">
+          <span class="modal-label">Sens</span>
+          <span class="modal-val" id="modal-meaning"></span>
+        </div>
+        <div class="modal-row">
+          <span class="modal-label">Leçon</span>
+          <span class="modal-val" id="modal-lecon"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
