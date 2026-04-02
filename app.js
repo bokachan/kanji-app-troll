@@ -119,29 +119,37 @@ function initFlashcards() {
   renderFC();
 }
 
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function setHTML(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = val;
+}
+
 function renderFC() {
   const total = fcDeck.length;
   if (fcIndex >= total) {
-    document.getElementById('fc-kanji').textContent = '✓';
-    document.getElementById('fc-hint').textContent = 'Terminé !';
-    document.getElementById('fc-actions').style.display = 'none';
-    document.getElementById('fc-progress').style.width = '100%';
-    document.getElementById('fc-counter').textContent = total + ' / ' + total;
+    setText('fc-kanji', '✓');
+    setText('fc-hint', 'Terminé !');
+    const actions = document.getElementById('fc-actions');
+    if (actions) actions.style.display = 'none';
+    const prog = document.getElementById('fc-progress');
+    if (prog) prog.style.width = '100%';
+    setText('fc-counter', total + ' / ' + total);
     return;
   }
   const k = fcDeck[fcIndex];
-  document.getElementById('fc-kanji').textContent = k.kanji;
-  document.getElementById('fc-hint').textContent = 'Cliquez pour révéler';
-  document.getElementById('fc-progress').style.width = (fcIndex / total * 100) + '%';
-  document.getElementById('fc-counter').textContent = (fcIndex + 1) + ' / ' + total;
-
-  // Back
-  const onEl = document.getElementById('fc-on');
-  const kunEl = document.getElementById('fc-kun');
-  onEl.innerHTML = `<span class="label">On'yomi</span><span class="vals">${k.on.join(' · ') || '—'}</span>`;
-  kunEl.innerHTML = `<span class="label">Kun'yomi</span><span class="vals">${k.kun.join(' · ') || '—'}</span>`;
-  document.getElementById('fc-meaning').textContent = k.meaning;
-  document.getElementById('fc-lecon').textContent = 'Leçon ' + k.lecon;
+  setText('fc-kanji', k.kanji);
+  setText('fc-hint', 'Cliquez pour révéler');
+  const prog = document.getElementById('fc-progress');
+  if (prog) prog.style.width = (fcIndex / total * 100) + '%';
+  setText('fc-counter', (fcIndex + 1) + ' / ' + total);
+  setHTML('fc-on', `<span class="label">On'yomi</span><span class="vals">${k.on.join(' · ') || '—'}</span>`);
+  setHTML('fc-kun', `<span class="label">Kun'yomi</span><span class="vals">${k.kun.join(' · ') || '—'}</span>`);
+  setText('fc-meaning', k.meaning);
+  setText('fc-lecon', 'Leçon ' + k.lecon);
 }
 
 document.getElementById('flashcard').addEventListener('click', () => {
@@ -151,7 +159,8 @@ document.getElementById('flashcard').addEventListener('click', () => {
   document.getElementById('fc-actions').style.display = fcFlipped ? 'flex' : 'none';
 });
 
-document.getElementById('fc-right').addEventListener('click', () => {
+document.getElementById('fc-right').addEventListener('click', (e) => {
+  e.stopPropagation();
   addScore(2);
   fcIndex++;
   fcFlipped = false;
@@ -160,11 +169,10 @@ document.getElementById('fc-right').addEventListener('click', () => {
   renderFC();
 });
 
-document.getElementById('fc-wrong').addEventListener('click', () => {
-  // Push card to end of deck to retry
+document.getElementById('fc-wrong').addEventListener('click', (e) => {
+  e.stopPropagation();
   fcDeck.push(fcDeck[fcIndex]);
   fcDeck.splice(fcIndex, 1);
-  // keep index, but it's now pointing to next card
   fcFlipped = false;
   document.getElementById('flashcard').classList.remove('flipped');
   document.getElementById('fc-actions').style.display = 'none';
